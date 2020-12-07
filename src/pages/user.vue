@@ -29,15 +29,22 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
 export default {
+  computed: {
+    ...mapGetters(["cartTotal"]),
+  },
   data() {
     return {
       nickname: "",
     };
   },
   methods: {
+    ...mapMutations(["cartListClear"]),
     // 退出按钮
     logout() {
+      // 清空购物车
+      this.cartListClear();
       sessionStorage.removeItem("logininfo");
       this.$toast.success("退出成功");
       this.$router.push("/login");

@@ -127,6 +127,8 @@ export default {
   created() {
     this.getBanners();
     this.getRecommendList();
+    this.uidInit();
+    this.getCartListAction(this.uid);
   },
 };
 </script>

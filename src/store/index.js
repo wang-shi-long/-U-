@@ -15,12 +15,16 @@ const store = new Vuex.Store({
         cartListInit(state, list) {
             state.cartList = list
         },
+        // 清空购物车
+        cartListClear(state) {
+            state.cartList = []
+        },
         uidInit(state, uid) {
             const logininfo = JSON.parse(sessionStorage.getItem('logininfo') || '{}')
             if (logininfo) {
                 state.uid = logininfo.uid
+                // console.log(state);
             }
-
         }
     },
     actions: {

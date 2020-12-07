@@ -19,6 +19,7 @@
       >
         <template #footer>
           <van-button
+            @click="addCart(item.id)"
             type="primary"
             size="small"
             icon="cart-o"
@@ -39,7 +40,11 @@
 </template>
 
 <script>
+import { mapState,mapActions } from "vuex";
 export default {
+  computed: {
+    ...mapState(["uid"]),
+  },
   data() {
     return {
       hashMore: true,
@@ -50,6 +55,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['getCartListAction']),
     // 获取商品对应分类下的商品
     getGoodsList() {
       const page = this.page;
@@ -73,6 +79,22 @@ export default {
       this.page += 1;
       // 重新请求数据列表
       this.getGoodsList();
+    },
+    // 添加购物车
+    addCart(goodsid) {
+      if (this.uid === undefined) {
+        return this.$toast.fail("请进行登录");
+      }
+      this.$http
+        .post("/cartadd", { uid: this.uid, num: 1, goodsid })
+        .then((res) => {
+          if (res.code === 200) {
+            this.getCartListAction(this.uid);
+            this.$toast.success(res.msg);
+          } else {
+            this.$toast.fail(res.msg);
+          }
+        });
     },
   },
   created() {

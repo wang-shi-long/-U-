@@ -32,9 +32,6 @@
             @minus="minusCart(item.id)"
           />
         </template>
-        <template #right>
-          <van-button square text="删除" type="danger" class="delete-button" />
-        </template>
       </van-card>
     </van-swipe-cell>
     <!-- 合计金额 -->
@@ -77,13 +74,12 @@ export default {
     // 删除
     del(id) {
       this.$http.post("/cartdelete", { id }).then((res) => {
-        if (res.data === 200) {
-          // 移除被删除的购物车信息
+        if (res.code === 200) {
           this.getCartListAction(this.uid);
-          this.$toast.success(res.msg);
-        } else {
-          this.$toast.fail(res.msg);
+          return this.$toast.success(res.msg);
         }
+         return this.$toast.fail(res.msg);
+        
       });
     },
   },
@@ -92,12 +88,8 @@ export default {
     ...mapGetters(["orderAmount", "cartTotal"]),
   },
   created() {
-    if (this.uid === "") {
-      this.uidInit();
-    }
-    if (this.cartList.length === 0) {
-      this.getCartListAction(this.uid);
-    }
+    this.uidInit();
+    this.getCartListAction(this.uid);
   },
 };
 </script>
